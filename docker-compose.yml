@@ -1,0 +1,29 @@
+version: '2'
+services:
+    db:
+        image: postgres:9.4.6
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_USER=odoo
+            - POSTGRES_PASSWORD=odoo
+        # log_driver: none
+
+    odoo:
+        build:
+            context: ./odoo/.
+            dockerfile: Dockerfile
+        depends_on:
+            - db
+        volumes:
+            - odoo_data:/var/lib/odoo
+        ports:
+            - 8069:8069
+        environment:
+            - PGHOST=db
+            - PGUSER=odoo
+            - PGPASSWORD=odoo
+
+volumes:
+    db_data:
+    odoo_data:
